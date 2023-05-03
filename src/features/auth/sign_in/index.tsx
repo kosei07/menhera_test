@@ -1,9 +1,7 @@
-import { type FC } from 'react'
+import { type FC } from 'react';
 
-const index:FC = () => {
-  return (
-    <div>index</div>
-  )
-}
+const index: FC = () => {
+  return <div>index</div>;
+};
 
-export default index
+export default index;

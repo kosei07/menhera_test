@@ -6,9 +6,9 @@ import BookList from "./features/book/list/index"
 import BookDetail from "./features/book/detail/index"
 
 export const Router = createBrowserRouter([
-  { path: "/sign_up", element: <SignUp /> },
-  { path: "/sign_in", element: <SignIn /> },
-  { path: "/book_create", element: <BookCreate /> },
+  { path: "/auth/sign_up", element: <SignUp /> },
+  { path: "/auth/sign_in", element: <SignIn /> },
+  { path: "/book/create", element: <BookCreate /> },
   { path: "/", element: <BookList /> },
-  { path: "/book_detail", element: <BookDetail /> }
+  { path: "/book/detail", element: <BookDetail /> }
 ]);

@@ -1,7 +1,7 @@
 import { type FC, type FormEvent, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
-import {auth} from "../../../utils/firebase"
+import { auth } from '../../../utils/firebase';
 
 const index: FC = () => {
   const [email, setEmail] = useState<string>('');

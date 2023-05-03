@@ -1,11 +1,9 @@
-import { initializeApp, getApp, type FirebaseApp } from 'firebase/app'
-import {
-  initializeAnalytics,
-  getAnalytics,
-  type Analytics,
-  setAnalyticsCollectionEnabled,
-} from 'firebase/analytics'
-import { type Auth, getAuth } from 'firebase/auth'
+// import { initializeApp } from 'firebase/app';
+// import { initializeApp, getApp, type FirebaseApp } from 'firebase/app';
+// import { type Auth, getAuth } from 'firebase/auth';
+
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -15,13 +13,9 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_APP_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_APP_ID,
   measurementId: import.meta.env.VITE_APP_MEASUREMENT_ID,
-}
+};
 
-initializeApp(firebaseConfig)
-export const getFirebaseApp = (): FirebaseApp => getApp()
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-export const getFirebaseAuth = (): Auth => getAuth()
-
-initializeAnalytics(getFirebaseApp())
-export const getFirebaseAnalytics = (): Analytics => getAnalytics()
-setAnalyticsCollectionEnabled(getFirebaseAnalytics(), true)
+export {auth}

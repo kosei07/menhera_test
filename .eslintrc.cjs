@@ -20,6 +20,7 @@ module.exports = {
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
+    "@typescript-eslint/strict-boolean-expressions": "off"
   },
   settings: {
     react: {

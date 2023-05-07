@@ -1,9 +1,15 @@
-// import { initializeApp } from 'firebase/app';
-// import { initializeApp, getApp, type FirebaseApp } from 'firebase/app';
-// import { type Auth, getAuth } from 'firebase/auth';
-
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {
+  getFirestore,
+  collection,
+  setDoc,
+  getDoc,
+  CollectionReference,
+  doc,
+} from 'firebase/firestore';
+import { FirebaseError } from '@firebase/util';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -17,5 +23,22 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const storage = getStorage(app);
+const db = getFirestore(app);
 
-export { auth };
+export {
+  auth,
+  storage,
+  db,
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  CollectionReference,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  signInWithEmailAndPassword,
+  signOut,
+  FirebaseError,
+};

@@ -16,3 +16,7 @@ export interface BOOK_TYPE {
   image: string | null;
   uid: string;
 }
+
+export interface BOOK_AND_ID_TYPE extends BOOK_TYPE {
+  id: string;
+}

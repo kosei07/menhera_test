@@ -1,9 +1,11 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState, useContext } from 'react';
 import { type BOOK_AND_ID_TYPE } from '../../../../../type';
 import { storage, ref, getDownloadURL } from '../../../../../utils/firebase';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../../../../contexts/user';
 
 const index: FC<BOOK_AND_ID_TYPE> = (props) => {
+  const user = useContext(UserContext);
   const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState<string>('');
 
@@ -26,7 +28,11 @@ const index: FC<BOOK_AND_ID_TYPE> = (props) => {
   }, [props.image]);
 
   const onClick = (): void => {
-    navigate('/book/detail', { state: props });
+    if (user.state.id === props.uid) {
+      navigate('/book/update', { state: props });
+    } else {
+      navigate('/book/detail', { state: props });
+    }
   };
 
   return (

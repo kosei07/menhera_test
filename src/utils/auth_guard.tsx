@@ -15,7 +15,7 @@ import {
   getDoc,
   type CollectionReference,
 } from './firebase';
-import { type USER_TYPE } from '../type/index';
+import { type PROFILE_TYPE } from '../type/index';
 
 interface Props {
   children: ReactNode;
@@ -35,7 +35,7 @@ export const AuthGuard: FC<Props> = (props) => {
   const profColRef = collection(
     db,
     'profiles'
-  ) as CollectionReference<USER_TYPE>;
+  ) as CollectionReference<PROFILE_TYPE>;
 
   useEffect(() => {
     try {
@@ -55,9 +55,14 @@ export const AuthGuard: FC<Props> = (props) => {
             if (!userContext.state.name) {
               getDoc(doc(profColRef, currentUer.uid))
                 .then((snapshot) => {
-                  console.log(snapshot.data());
                   if (!snapshot.data()?.name) {
                     navigate('/profile/create');
+                  }
+                  if (snapshot.exists()) {
+                    userContext.dispatch({
+                      type: 'SET_PROFILE',
+                      payload: snapshot.data(),
+                    });
                   }
                 })
                 .catch((e) => {

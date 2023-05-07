@@ -1,26 +1,39 @@
-import { type FC, type FormEvent, useState, useCallback ,useContext} from 'react';
-import { storage, ref, uploadBytes ,db,doc,setDoc } from '../../utils/firebase';
-import { useValidation } from '../../hooks/use_validation';
-import BirthOfDateSelect from './components/birth_of_date_select/index';
-import GenderButton from './components/gender_button/index';
-import { UserContext } from '../../contexts/user';
-import createRandomChar from '../../utils/random_char';
-import { ToastContext } from '../../contexts/toast';
+import {
+  type FC,
+  type FormEvent,
+  useState,
+  useCallback,
+  useContext,
+} from 'react';
+import {
+  storage,
+  ref,
+  uploadBytes,
+  db,
+  doc,
+  setDoc,
+} from '../../../utils/firebase';
+import { useValidation } from '../../../hooks/use_validation';
+import BirthOfDateSelect from '../components/birth_of_date_select/index';
+import GenderButton from '../components/gender_button/index';
+import { UserContext } from '../../../contexts/user';
+import createRandomChar from '../../../utils/random_char';
+import { ToastContext } from '../../../contexts/toast';
 
 const index: FC = () => {
-  const toast = useContext(ToastContext)
-  const user = useContext(UserContext)
+  const toast = useContext(ToastContext);
+  const user = useContext(UserContext);
   const [name, setName] = useState<string>('');
   const [birthOfDate, setBirthOfDate] = useState<string>('');
   const [icon, setIcon] = useState<File | null>(null);
-  const [gender, setGender] = useState<string>('')
+  const [gender, setGender] = useState<string>('');
 
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setName(e.currentTarget.value);
     setNameValidation(e.currentTarget.value);
   };
 
-  const handleChangeIcon = (e: React.ChangeEvent<HTMLInputElement>):void => {
+  const handleChangeIcon = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files !== null) {
       setIcon(e.target.files[0]);
     }
@@ -32,38 +45,46 @@ const index: FC = () => {
     e.preventDefault();
     try {
       if (icon) {
-        const fileName = createRandomChar()
+        const fileName = createRandomChar();
         const imageRef = ref(storage, `icon/${fileName}`);
-        uploadBytes(imageRef, icon).then(() => {
-          setDoc(doc(db, 'profiles', user.state.id),{
-            name: name,
-            icon: fileName,
-            birthOfDate:birthOfDate,
-            gender: gender
-          }).catch(()=>{throw new Error})
-        }).catch(()=>{throw new Error})
-      }else{
-        setDoc(doc(db, 'profiles', user.state.id),{
+        uploadBytes(imageRef, icon)
+          .then(() => {
+            setDoc(doc(db, 'profiles', user.state.id), {
+              name: name,
+              icon: fileName,
+              birthOfDate: birthOfDate,
+              gender: gender,
+            }).catch(() => {
+              throw new Error();
+            });
+          })
+          .catch(() => {
+            throw new Error();
+          });
+      } else {
+        setDoc(doc(db, 'profiles', user.state.id), {
           name: name,
           icon: null,
-          birthOfDate:birthOfDate,
-          gender: gender
-        }).catch(()=>{throw new Error})
+          birthOfDate: birthOfDate,
+          gender: gender,
+        }).catch(() => {
+          throw new Error();
+        });
       }
     } catch (err) {
       toast.dispatch({
-        type: "SHOW_FAILED_TOAST",
-        payload:{
-          message: '処理に失敗しました'
-        }
-      })
+        type: 'SHOW_FAILED_TOAST',
+        payload: {
+          message: '処理に失敗しました',
+        },
+      });
     }
   };
 
   const checkValidParams = useCallback(() => {
-    return  !nameError && birthOfDate && gender
-  }, [nameError, birthOfDate ,gender]);
-  
+    return !nameError && birthOfDate && gender;
+  }, [nameError, birthOfDate, gender]);
+
   return (
     <form className='form' onSubmit={createProfile}>
       <div className='form-body'>
@@ -87,7 +108,7 @@ const index: FC = () => {
           <p>{nameError}</p>
         </div>
         <BirthOfDateSelect setBirthOfDate={setBirthOfDate} />
-        <GenderButton gender={gender} setGender={setGender}/>
+        <GenderButton gender={gender} setGender={setGender} />
       </div>
       <div className='footer'>
         <button type='submit' className='btn' disabled={!checkValidParams()}>

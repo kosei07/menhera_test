@@ -1,6 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
 import {
   getFirestore,
   collection,
@@ -42,6 +48,7 @@ export {
   ref,
   uploadBytes,
   getDownloadURL,
+  deleteObject,
   signInWithEmailAndPassword,
   signOut,
   FirebaseError,

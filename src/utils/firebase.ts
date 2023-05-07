@@ -6,6 +6,8 @@ import {
   collection,
   setDoc,
   getDoc,
+  getDocs,
+  query,
   CollectionReference,
   doc,
 } from 'firebase/firestore';
@@ -34,6 +36,8 @@ export {
   doc,
   setDoc,
   getDoc,
+  getDocs,
+  query,
   CollectionReference,
   ref,
   uploadBytes,

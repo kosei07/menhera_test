@@ -1,8 +1,10 @@
 import { type FC, useEffect, useState } from 'react';
 import { type BOOK_AND_ID_TYPE } from '../../../../../type';
 import { storage, ref, getDownloadURL } from '../../../../../utils/firebase';
+import { useNavigate } from 'react-router-dom';
 
 const index: FC<BOOK_AND_ID_TYPE> = (props) => {
+  const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState<string>('');
 
   useEffect(() => {
@@ -22,8 +24,13 @@ const index: FC<BOOK_AND_ID_TYPE> = (props) => {
         });
     }
   }, [props.image]);
+
+  const onClick = (): void => {
+    navigate('/book/detail', { state: props });
+  };
+
   return (
-    <div>
+    <div onClick={onClick}>
       <p>{props.title}</p>
       <p>{props.author}</p>
       <p>{props.text}</p>

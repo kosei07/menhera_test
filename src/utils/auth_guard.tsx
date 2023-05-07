@@ -32,16 +32,19 @@ export const AuthGuard: FC<Props> = (props) => {
   const [state, setState] = useState<State>(initialState);
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
-  const shopsColRef = collection(db, 'profiles') as CollectionReference<USER_TYPE>;
+  const profColRef = collection(
+    db,
+    'profiles'
+  ) as CollectionReference<USER_TYPE>;
 
   useEffect(() => {
     try {
       const auth = getAuth();
       return onAuthStateChanged(auth, (currentUer) => {
         if (currentUer) {
-          if (!userContext.state.id){
+          if (!userContext.state.id) {
             setState({
-              user: currentUer
+              user: currentUer,
             });
             userContext.dispatch({
               type: 'SET_USER_ID',
@@ -49,12 +52,12 @@ export const AuthGuard: FC<Props> = (props) => {
                 id: currentUer.uid,
               },
             });
-            if (!userContext.state.name){
-              getDoc(doc(shopsColRef, currentUer.uid))
+            if (!userContext.state.name) {
+              getDoc(doc(profColRef, currentUer.uid))
                 .then((snapshot) => {
                   console.log(snapshot.data());
-                  if(!snapshot.data()?.name){
-                    navigate('/profile/create')
+                  if (!snapshot.data()?.name) {
+                    navigate('/profile/create');
                   }
                 })
                 .catch((e) => {

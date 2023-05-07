@@ -64,7 +64,7 @@ const index: FC = () => {
       } else {
         setDoc(doc(db, 'profiles', user.state.id), {
           name: name,
-          icon: null,
+          icon: '',
           birthOfDate: birthOfDate,
           gender: gender,
         }).catch(() => {

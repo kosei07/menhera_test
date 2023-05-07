@@ -1,11 +1,17 @@
-import { type FC, type FormEvent, useState, useCallback, useContext } from 'react';
+import {
+  type FC,
+  type FormEvent,
+  useState,
+  useCallback,
+  useContext,
+} from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db,doc,setDoc } from '../../../utils/firebase';
+import { auth, db, doc, setDoc } from '../../../utils/firebase';
 import { useValidation } from '../../../hooks/use_validation';
 import { ToastContext } from '../../../contexts/toast';
 
 const index: FC = () => {
-  const toast = useContext(ToastContext)
+  const toast = useContext(ToastContext);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -39,34 +45,34 @@ const index: FC = () => {
 
   const signUp = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    try{
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const cityRef = doc(db, 'profiles', userCredential.user.uid);
-        setDoc(cityRef,{
-          name:'',
-          icon: null,
-          birthOfDate:'',
-          gender:''
-        }).catch(()=>{
-          throw new Error
+    try {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const cityRef = doc(db, 'profiles', userCredential.user.uid);
+          setDoc(cityRef, {
+            name: '',
+            icon: '',
+            birthOfDate: '',
+            gender: '',
+          }).catch(() => {
+            throw new Error();
+          });
         })
-      })
-      .catch(() => {
-        throw new Error
-      });
-    } catch(e){
+        .catch(() => {
+          throw new Error();
+        });
+    } catch (e) {
       toast.dispatch({
-        type: "SHOW_FAILED_TOAST",
-        payload:{
-          message: '処理に失敗しました'
-        }
-      })
+        type: 'SHOW_FAILED_TOAST',
+        payload: {
+          message: '処理に失敗しました',
+        },
+      });
     }
   };
 
   const checkValidParams = useCallback(() => {
-    return !emailError && !passwordError
+    return !emailError && !passwordError;
   }, [emailError, passwordError]);
 
   return (

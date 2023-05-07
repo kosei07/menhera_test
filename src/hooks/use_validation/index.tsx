@@ -5,10 +5,6 @@ const getEmailErrorMessage = (name: string, value: string): string => {
     return `${name}を入力してください`;
   } else if (!value.match(/@.+\..+$/)) {
     return `${name}の形式が正しくありません`;
-  } else if (
-    value.match(/(script>)|(SELECT )|(INSERT )|(UPDATE )|(DELETE )|(LIKE )/g)
-  ) {
-    return `${name}の形式が正しくありません`;
   }
   return '';
 };
@@ -35,10 +31,21 @@ const getNameErrorMessage = (name: string, value: string): string => {
   return '';
 };
 
+const getTextErrorMessage = (name: string, value: string): string => {
+  if (!value) {
+    return `${name}を入力してください`;
+  }
+  return '';
+};
+
 export function useValidation(
   value: string,
   name: string,
-  type: 'password' | 'email' | 'name'
+  type: 'password' | 'email' | 'name' | 'text',
+  length?: {
+    max: number,
+    min: number
+  }
 ): [error: string, changeHandler: (inputValue: string) => void] {
   const [error, setErrorMessage] = useState<string>('');
 
@@ -54,6 +61,17 @@ export function useValidation(
       case 'name':
         validationResult = getNameErrorMessage(name, inputValue);
         break;
+      case 'text':
+        validationResult = getTextErrorMessage(name, inputValue);
+        break;
+    }
+    if(length){
+      if (inputValue.length < length.min){
+        validationResult = `${name}は${String(length.min)}文字以上で入力してください`;
+      }
+      else if (inputValue.length > length.max){
+        validationResult = `${name}は${String(length.max)}文字以下で入力してください`;
+      }
     }
     setErrorMessage(validationResult);
   };

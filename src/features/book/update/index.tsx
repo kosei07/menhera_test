@@ -14,6 +14,7 @@ import {
   db,
   doc,
   setDoc,
+  deleteDoc,
   deleteObject,
 } from '../../../utils/firebase';
 import { useValidation } from '../../../hooks/use_validation';
@@ -128,6 +129,34 @@ const index: FC = () => {
     }
   };
 
+  const deleteBook = (): void => {
+    try {
+      deleteDoc(doc(db, 'books', state.id))
+        .then(() => {
+          if (state.image) {
+            const deleteRef = ref(storage, `book/${state.image}`);
+            deleteObject(deleteRef)
+              .then(() => {
+                navigate('/');
+              })
+              .catch((e) => {
+                throw new Error(e);
+              });
+          }
+        })
+        .catch((e) => {
+          throw new Error(e);
+        });
+    } catch (e) {
+      toast.dispatch({
+        type: 'SHOW_FAILED_TOAST',
+        payload: {
+          message: '処理に失敗しました',
+        },
+      });
+    }
+  };
+
   const checkValidParams = useCallback(() => {
     return !titleError && !authorError && !textError;
   }, [titleError, authorError, textError]);
@@ -171,65 +200,70 @@ const index: FC = () => {
   }, []);
 
   return (
-    <form className='form' onSubmit={updateBook}>
-      <div className='form-body'>
-        <div className='image'>
-          {image ? (
-            <img src={URL.createObjectURL(image)} alt='' />
-          ) : (
-            <img src={preImageUrl} alt='' />
-          )}
-          <input type='file' accept='image/*' onChange={handleChangeIcon} />
+    <div>
+      <form className='form' onSubmit={updateBook}>
+        <div className='form-body'>
+          <div className='image'>
+            {image ? (
+              <img src={URL.createObjectURL(image)} alt='' />
+            ) : (
+              <img src={preImageUrl} alt='' />
+            )}
+            <input type='file' accept='image/*' onChange={handleChangeIcon} />
+          </div>
+          <div className='name'>
+            <label className='form__label' htmlFor='name'>
+              Title
+            </label>
+            <input
+              type='text'
+              id='title'
+              className='form__input'
+              placeholder='Title'
+              value={title}
+              onChange={handleChangeTitle}
+            />
+            <p>{titleError}</p>
+          </div>
+          <div className='name'>
+            <label className='form__label' htmlFor='name'>
+              Author
+            </label>
+            <input
+              type='text'
+              id='title'
+              className='form__input'
+              placeholder='Title'
+              value={author}
+              onChange={handleChangeAuthor}
+            />
+            <p>{authorError}</p>
+          </div>
+          <div className='name'>
+            <label className='form__label' htmlFor='name'>
+              Text
+            </label>
+            <input
+              type='text'
+              id='text'
+              className='form__input'
+              placeholder='Text'
+              value={text}
+              onChange={handleChangeText}
+            />
+            <p>{textError}</p>
+          </div>
         </div>
-        <div className='name'>
-          <label className='form__label' htmlFor='name'>
-            Title
-          </label>
-          <input
-            type='text'
-            id='title'
-            className='form__input'
-            placeholder='Title'
-            value={title}
-            onChange={handleChangeTitle}
-          />
-          <p>{titleError}</p>
+        <div className='footer'>
+          <button type='submit' className='btn' disabled={!checkValidParams()}>
+            作成
+          </button>
         </div>
-        <div className='name'>
-          <label className='form__label' htmlFor='name'>
-            Author
-          </label>
-          <input
-            type='text'
-            id='title'
-            className='form__input'
-            placeholder='Title'
-            value={author}
-            onChange={handleChangeAuthor}
-          />
-          <p>{authorError}</p>
-        </div>
-        <div className='name'>
-          <label className='form__label' htmlFor='name'>
-            Text
-          </label>
-          <input
-            type='text'
-            id='text'
-            className='form__input'
-            placeholder='Text'
-            value={text}
-            onChange={handleChangeText}
-          />
-          <p>{textError}</p>
-        </div>
+      </form>
+      <div>
+        <button onClick={deleteBook}>削除</button>
       </div>
-      <div className='footer'>
-        <button type='submit' className='btn' disabled={!checkValidParams()}>
-          作成
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 

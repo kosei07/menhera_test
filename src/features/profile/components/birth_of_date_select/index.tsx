@@ -2,6 +2,7 @@ import { type FC, useState, useEffect } from 'react';
 
 interface Props {
   setBirthOfDate: React.Dispatch<React.SetStateAction<string>>;
+  birthOfDate?: string;
 }
 
 const index: FC<Props> = (props) => {
@@ -27,10 +28,23 @@ const index: FC<Props> = (props) => {
     }
   }, [year, month, date]);
 
+  useEffect(() => {
+    if (props.birthOfDate) {
+      const slicedBirthOfDate = props.birthOfDate.split('/');
+      setYear(slicedBirthOfDate[0]);
+      setMonth(slicedBirthOfDate[1]);
+      setDate(slicedBirthOfDate[2]);
+    }
+  }, [props.birthOfDate]);
+
+  if (props.birthOfDate && !year) {
+    return null;
+  }
+
   return (
     <>
-      <select name='year' onChange={handleYearChange}>
-      <option value=''>-</option>
+      <select name='year' onChange={handleYearChange} defaultValue={year}>
+        <option value=''>-</option>
         <option value='1970'>1970</option>
         <option value='1971'>1971</option>
         <option value='1972'>1972</option>
@@ -86,7 +100,7 @@ const index: FC<Props> = (props) => {
         <option value='2022'>2022</option>
         <option value='2023'>2023</option>
       </select>
-      <select name='month' onChange={handleMonthChange}>
+      <select name='month' onChange={handleMonthChange} defaultValue={month}>
         <option value=''>-</option>
         <option value='1'>1</option>
         <option value='2'>2</option>
@@ -101,7 +115,7 @@ const index: FC<Props> = (props) => {
         <option value='11'>11</option>
         <option value='12'>12</option>
       </select>
-      <select name='date' onChange={handleDateChange}>
+      <select name='date' onChange={handleDateChange} defaultValue={date}>
         <option value=''>-</option>
         <option value='1'>1</option>
         <option value='2'>2</option>

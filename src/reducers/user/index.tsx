@@ -4,8 +4,8 @@ export const initialState = {
   id: '',
   name: '',
   icon: '',
-  birthOfDate: 'string',
-  gender: 'string',
+  birthOfDate: '',
+  gender: '',
 };
 
 export type Action =

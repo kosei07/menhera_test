@@ -1,6 +1,6 @@
 export interface PROFILE_TYPE {
   name: string;
-  icon: string | null;
+  icon: string;
   birthOfDate: string;
   gender: string;
 }
@@ -13,7 +13,7 @@ export interface BOOK_TYPE {
   title: string;
   author: string;
   text: string;
-  image: string | null;
+  image: string;
   uid: string;
 }
 

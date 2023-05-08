@@ -25,8 +25,12 @@ import { ToastContext } from '../../../contexts/toast';
 import { type USER_TYPE } from '../../../type';
 import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
+import classes from './index.module.css';
+import NoImage from '../../../assets/images/no_image.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const index: FC = () => {
+  const navigate = useNavigate();
   const toast = useContext(ToastContext);
   const state: USER_TYPE = useContext(UserContext).state;
   const [name, setName] = useState<string>('');
@@ -61,9 +65,19 @@ const index: FC = () => {
               icon: fileName,
               birthOfDate: birthOfDate,
               gender: gender,
-            }).catch(() => {
-              throw new Error();
-            });
+            })
+              .then(() => {
+                toast.dispatch({
+                  type: 'SHOW_SUCCEEDED_TOAST',
+                  payload: {
+                    message: 'プロフィールを更新しました',
+                  },
+                });
+                navigate('/');
+              })
+              .catch(() => {
+                throw new Error();
+              });
           })
           .catch(() => {
             throw new Error();
@@ -123,34 +137,49 @@ const index: FC = () => {
   }, [state.icon]);
 
   return (
-    <form className='form' onSubmit={updateProfile}>
-      <div className='form-body'>
-        <div className='image'>
-          {icon ? (
-            <img src={URL.createObjectURL(icon)} alt='' />
-          ) : (
-            <img src={preIcon} alt='' />
-          )}
-          <input type='file' accept='image/*' onChange={handleChangeIcon} />
-        </div>
-        <Input
-          label='名前'
-          type='text'
-          placeholder='山田太郎'
-          value={name}
-          onChangeHandler={handleChangeName}
-          valueError={nameError}
-        />
-        <BirthOfDateSelect
-          birthOfDate={state.birthOfDate}
-          setBirthOfDate={setBirthOfDate}
-        />
-        <GenderButton gender={gender} setGender={setGender} />
+    <div className='main'>
+      <div className={classes.form_wrapper}>
+        <form className={classes.form} onSubmit={updateProfile}>
+          <div className={classes.image_wrapper}>
+            <label className={classes.image_label}>プロフィール画像</label>
+            <div className={classes.image_input_wrapper}>
+              {icon ? (
+                <img
+                  className={classes.image}
+                  src={icon ? URL.createObjectURL(icon) : NoImage}
+                  alt=''
+                />
+              ) : (
+                <img className={classes.image} src={preIcon} alt='' />
+              )}
+              <input
+                className={classes.image_input}
+                type='file'
+                accept='image/*'
+                onChange={handleChangeIcon}
+              />
+            </div>
+          </div>
+          <Input
+            label='名前'
+            type='text'
+            placeholder='山田太郎'
+            value={name}
+            onChangeHandler={handleChangeName}
+            valueError={nameError}
+          />
+          <BirthOfDateSelect
+            birthOfDate={state.birthOfDate}
+            setBirthOfDate={setBirthOfDate}
+          />
+          <GenderButton gender={gender} setGender={setGender} />
+
+          <div className={classes.footer}>
+            <Button label='更新' disabled={!checkValidParams()} />
+          </div>
+        </form>
       </div>
-      <div className='footer'>
-        <Button label='更新' disabled={!checkValidParams()} />
-      </div>
-    </form>
+    </div>
   );
 };
 

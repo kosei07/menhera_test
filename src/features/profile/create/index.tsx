@@ -19,6 +19,7 @@ import GenderButton from '../components/gender_button/index';
 import { UserContext } from '../../../contexts/user';
 import createRandomChar from '../../../utils/random_char';
 import { ToastContext } from '../../../contexts/toast';
+import Input from '../../../components/input/index';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -107,6 +108,14 @@ const index: FC = () => {
           />
           <p>{nameError}</p>
         </div>
+        <Input
+          label='名前'
+          type='text'
+          placeholder='山田太郎'
+          value={name}
+          onChangeHandler={handleChangeName}
+          valueError={nameError}
+        />
         <BirthOfDateSelect setBirthOfDate={setBirthOfDate} />
         <GenderButton gender={gender} setGender={setGender} />
       </div>

@@ -23,6 +23,7 @@ import { UserContext } from '../../../contexts/user';
 import createRandomChar from '../../../utils/random_char';
 import { ToastContext } from '../../../contexts/toast';
 import { type USER_TYPE } from '../../../type';
+import Input from '../../../components/input/index';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -131,20 +132,14 @@ const index: FC = () => {
           )}
           <input type='file' accept='image/*' onChange={handleChangeIcon} />
         </div>
-        <div className='name'>
-          <label className='form__label' htmlFor='name'>
-            Name
-          </label>
-          <input
-            type='name'
-            id='name'
-            className='form__input'
-            placeholder='Name'
-            value={name}
-            onChange={handleChangeName}
-          />
-          <p>{nameError}</p>
-        </div>
+        <Input
+          label='名前'
+          type='text'
+          placeholder='山田太郎'
+          value={name}
+          onChangeHandler={handleChangeName}
+          valueError={nameError}
+        />
         <BirthOfDateSelect
           birthOfDate={state.birthOfDate}
           setBirthOfDate={setBirthOfDate}

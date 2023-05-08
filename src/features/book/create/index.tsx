@@ -17,6 +17,7 @@ import { useValidation } from '../../../hooks/use_validation';
 import { UserContext } from '../../../contexts/user';
 import createRandomChar from '../../../utils/random_char';
 import { ToastContext } from '../../../contexts/toast';
+import Input from '../../../components/input/index';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -116,48 +117,30 @@ const index: FC = () => {
           <img src={image ? URL.createObjectURL(image) : ''} alt='' />
           <input type='file' accept='image/*' onChange={handleChangeIcon} />
         </div>
-        <div className='name'>
-          <label className='form__label' htmlFor='name'>
-            Title
-          </label>
-          <input
-            type='text'
-            id='title'
-            className='form__input'
-            placeholder='Title'
-            value={title}
-            onChange={handleChangeTitle}
-          />
-          <p>{titleError}</p>
-        </div>
-        <div className='name'>
-          <label className='form__label' htmlFor='name'>
-            Author
-          </label>
-          <input
-            type='text'
-            id='title'
-            className='form__input'
-            placeholder='Title'
-            value={author}
-            onChange={handleChangeAuthor}
-          />
-          <p>{authorError}</p>
-        </div>
-        <div className='name'>
-          <label className='form__label' htmlFor='name'>
-            Text
-          </label>
-          <input
-            type='text'
-            id='text'
-            className='form__input'
-            placeholder='Text'
-            value={text}
-            onChange={handleChangeText}
-          />
-          <p>{textError}</p>
-        </div>
+        <Input
+          label='タイトル'
+          type='text'
+          placeholder='title'
+          value={title}
+          onChangeHandler={handleChangeTitle}
+          valueError={titleError}
+        />
+        <Input
+          label='筆者'
+          type='text'
+          placeholder='author'
+          value={author}
+          onChangeHandler={handleChangeAuthor}
+          valueError={authorError}
+        />
+        <Input
+          label='感想'
+          type='text'
+          placeholder='author'
+          value={text}
+          onChangeHandler={handleChangeText}
+          valueError={textError}
+        />
       </div>
       <div className='footer'>
         <button type='submit' className='btn' disabled={!checkValidParams()}>

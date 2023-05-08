@@ -9,6 +9,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db, doc, setDoc } from '../../../utils/firebase';
 import { useValidation } from '../../../hooks/use_validation';
 import { ToastContext } from '../../../contexts/toast';
+import Input from '../../../components/input/index';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -76,57 +77,43 @@ const index: FC = () => {
   }, [emailError, passwordError]);
 
   return (
-    <form className='form' onSubmit={signUp}>
-      <div className='form-body'>
-        <div className='email'>
-          <label className='form__label' htmlFor='email'>
-            Email
-          </label>
-          <input
+    <div className='main'>
+      <form onSubmit={signUp}>
+        <div className='form-body'>
+          <Input
+            label='メールアドレス'
             type='email'
-            id='email'
-            className='form__input'
-            placeholder='Email'
+            placeholder='example@ex.com'
             value={email}
-            onChange={handleChangeEmail}
+            onChangeHandler={handleChangeEmail}
+            valueError={emailError}
           />
-          <p>{emailError}</p>
-        </div>
-        <div className='password'>
-          <label className='form__label' htmlFor='password'>
-            Password
-          </label>
-          <input
-            className='form__input'
+          <Input
+            label='パスワード'
             type='password'
-            id='password'
-            placeholder='Password'
+            placeholder='pass1234'
             value={password}
-            onChange={handleChangePassword}
+            onChangeHandler={handleChangePassword}
+            valueError={passwordError}
           />
-          <p>{passwordError}</p>
-        </div>
-        <div className='confirm-password'>
-          <label className='form__label' htmlFor='confirmPassword'>
-            Confirm Password
-          </label>
-          <input
-            className='form__input'
+          <Input
+            label='確認用パスワード'
             type='password'
-            id='confirmPassword'
-            placeholder='Confirm Password'
+            placeholder='pass1234'
             value={confirmPassword}
-            onChange={handleChangeConfirmPassword}
+            onChangeHandler={handleChangeConfirmPassword}
+            valueError={
+              password !== confirmPassword ? 'パスワードが一致しません' : ''
+            }
           />
-          <p>{password !== confirmPassword && 'パスワードが一致しません'}</p>
         </div>
-      </div>
-      <div className='footer'>
-        <button type='submit' className='btn' disabled={!checkValidParams()}>
-          Register
-        </button>
-      </div>
-    </form>
+        <div className='footer'>
+          <button type='submit' className='btn' disabled={!checkValidParams()}>
+            Register
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

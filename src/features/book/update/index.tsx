@@ -91,9 +91,19 @@ const index: FC = () => {
               text: text,
               image: fileName,
               uid: user.state.id,
-            }).catch(() => {
-              throw new Error();
-            });
+            })
+              .then(() => {
+                toast.dispatch({
+                  type: 'SHOW_SUCCEEDED_TOAST',
+                  payload: {
+                    message: '書籍レビューを更新しました',
+                  },
+                });
+                navigate('/');
+              })
+              .catch(() => {
+                throw new Error();
+              });
           })
           .catch(() => {
             throw new Error();
@@ -141,6 +151,12 @@ const index: FC = () => {
             const deleteRef = ref(storage, `book/${state.image}`);
             deleteObject(deleteRef)
               .then(() => {
+                toast.dispatch({
+                  type: 'SHOW_SUCCEEDED_TOAST',
+                  payload: {
+                    message: '書籍レビューを削除しました',
+                  },
+                });
                 navigate('/');
               })
               .catch((e) => {
@@ -208,7 +224,7 @@ const index: FC = () => {
       <div className={classes.form_wrapper}>
         <form className={classes.form} onSubmit={updateBook}>
           <div className={classes.image_wrapper}>
-            <label className={classes.image_label}>プロフィール画像</label>
+            <label className={classes.image_label}>書籍画像</label>
             <div className={classes.image_input_wrapper}>
               {image ? (
                 <img

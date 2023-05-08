@@ -8,14 +8,31 @@ import BookUpdate from './features/book/update/index';
 import ProfileCreate from './features/profile/create/index';
 import ProfileUpdate from './features/profile/update/index';
 import { AuthGuard } from './utils/auth_guard';
-
+import { Header } from './components/header';
 export const Router = createBrowserRouter([
-  { path: '/auth/sign_up', element: <SignUp /> },
-  { path: '/auth/sign_in', element: <SignIn /> },
+  {
+    path: '/auth/sign_up',
+    element: (
+      <>
+        <Header title='サインアップ' />
+        <SignUp />
+      </>
+    ),
+  },
+  {
+    path: '/auth/sign_in',
+    element: (
+      <>
+        <Header title='サインイン' />
+        <SignIn />
+      </>
+    ),
+  },
   {
     path: '/profile/create',
     element: (
       <AuthGuard>
+        <Header title='プロフィール作成' />
         <ProfileCreate />
       </AuthGuard>
     ),
@@ -24,6 +41,7 @@ export const Router = createBrowserRouter([
     path: '/profile/update',
     element: (
       <AuthGuard>
+        <Header title='プロフィール更新' />
         <ProfileUpdate />
       </AuthGuard>
     ),
@@ -32,6 +50,7 @@ export const Router = createBrowserRouter([
     path: '/book/create',
     element: (
       <AuthGuard>
+        <Header title='ブック作成' />
         <BookCreate />
       </AuthGuard>
     ),
@@ -40,6 +59,7 @@ export const Router = createBrowserRouter([
     path: '/book/detail',
     element: (
       <AuthGuard>
+        <Header title='ブック詳細' />
         <BookDetail />
       </AuthGuard>
     ),
@@ -48,6 +68,7 @@ export const Router = createBrowserRouter([
     path: '/book/update',
     element: (
       <AuthGuard>
+        <Header title='ブック更新' />
         <BookUpdate />
       </AuthGuard>
     ),
@@ -56,6 +77,7 @@ export const Router = createBrowserRouter([
     index: true,
     element: (
       <AuthGuard>
+        <Header title='ブック一覧' />
         <BookList />
       </AuthGuard>
     ),

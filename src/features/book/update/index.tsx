@@ -25,6 +25,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { type BOOK_AND_ID_TYPE } from '../../../type';
 import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
+import classes from './index.module.css';
+import NoImage from '../../../assets/images/no_image.jpg';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -202,16 +204,28 @@ const index: FC = () => {
   }, []);
 
   return (
-    <div>
-      <form className='form' onSubmit={updateBook}>
-        <div className='form-body'>
-          <div className='image'>
-            {image ? (
-              <img src={URL.createObjectURL(image)} alt='' />
-            ) : (
-              <img src={preImageUrl} alt='' />
-            )}
-            <input type='file' accept='image/*' onChange={handleChangeIcon} />
+    <div className='main'>
+      <div className={classes.form_wrapper}>
+        <form className={classes.form} onSubmit={updateBook}>
+          <div className={classes.image_wrapper}>
+            <label className={classes.image_label}>プロフィール画像</label>
+            <div className={classes.image_input_wrapper}>
+              {image ? (
+                <img
+                  className={classes.image}
+                  src={image ? URL.createObjectURL(image) : NoImage}
+                  alt=''
+                />
+              ) : (
+                <img className={classes.image} src={preImageUrl} alt='' />
+              )}
+              <input
+                className={classes.image_input}
+                type='file'
+                accept='image/*'
+                onChange={handleChangeIcon}
+              />
+            </div>
           </div>
           <Input
             label='タイトル'
@@ -237,13 +251,13 @@ const index: FC = () => {
             onChangeHandler={handleChangeText}
             valueError={textError}
           />
-        </div>
-        <div className='footer'>
-          <Button label='更新' disabled={!checkValidParams()} />
-        </div>
-      </form>
-      <div>
-        <button onClick={deleteBook}>削除</button>
+          <div className={classes.footer}>
+            <Button label='更新' disabled={!checkValidParams()} />
+            <button className={classes.delete_btn} onClick={deleteBook}>
+              削除
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

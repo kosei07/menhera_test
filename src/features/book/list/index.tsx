@@ -20,13 +20,11 @@ const index: FC = () => {
     getDocs(shopsColRef)
       .then((snapshot) => {
         snapshot.forEach((doc) => {
-          console.log(doc.id);
           docDatas.push({ ...doc.data(), id: doc.id });
         });
       })
       .then(() => {
         setBooks(docDatas);
-        console.log(docDatas);
       })
       .catch(() => {
         throw new Error();

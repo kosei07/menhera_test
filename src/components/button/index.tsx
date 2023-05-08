@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import classes from './index.module.css';
 
 interface Props {
   label: string;
@@ -7,7 +8,7 @@ interface Props {
 
 const index: FC<Props> = (props) => {
   return (
-    <button type='submit' className='btn' disabled={props.disabled}>
+    <button type='submit' className={classes.btn} disabled={props.disabled}>
       {props.label}
     </button>
   );

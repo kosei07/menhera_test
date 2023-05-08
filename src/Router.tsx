@@ -14,7 +14,7 @@ export const Router = createBrowserRouter([
     path: '/auth/sign_up',
     element: (
       <>
-        <Header title='サインアップ' />
+        <Header title='書籍レビューアプリ' />
         <SignUp />
       </>
     ),
@@ -23,7 +23,7 @@ export const Router = createBrowserRouter([
     path: '/auth/sign_in',
     element: (
       <>
-        <Header title='サインイン' />
+        <Header title='書籍レビューアプリ' />
         <SignIn />
       </>
     ),
@@ -50,7 +50,7 @@ export const Router = createBrowserRouter([
     path: '/book/create',
     element: (
       <AuthGuard>
-        <Header title='ブック作成' />
+        <Header title='書籍レビュー作成' />
         <BookCreate />
       </AuthGuard>
     ),
@@ -59,7 +59,7 @@ export const Router = createBrowserRouter([
     path: '/book/detail',
     element: (
       <AuthGuard>
-        <Header title='ブック詳細' />
+        <Header title='書籍レビュー詳細' />
         <BookDetail />
       </AuthGuard>
     ),
@@ -68,7 +68,7 @@ export const Router = createBrowserRouter([
     path: '/book/update',
     element: (
       <AuthGuard>
-        <Header title='ブック更新' />
+        <Header title='書籍レビュー更新' />
         <BookUpdate />
       </AuthGuard>
     ),
@@ -77,7 +77,7 @@ export const Router = createBrowserRouter([
     index: true,
     element: (
       <AuthGuard>
-        <Header title='ブック一覧' />
+        <Header title='書籍レビュー覧' />
         <BookList />
       </AuthGuard>
     ),

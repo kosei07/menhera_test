@@ -87,6 +87,14 @@ const index: FC = () => {
             valueError={passwordError}
           />
           <div className={classes.footer}>
+            <p
+              className={classes.footer_text}
+              onClick={() => {
+                navigate('/auth/sign_up');
+              }}
+            >
+              アカウントをお持ちでない方はこちら
+            </p>
             <Button label='サインイン' disabled={!checkValidParams()} />
           </div>
         </form>

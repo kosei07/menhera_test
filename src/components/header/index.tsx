@@ -3,8 +3,13 @@ import { UserContext } from '../../contexts/user';
 import { useContext } from 'react';
 import { auth, signOut, FirebaseError } from '../../utils/firebase';
 import { useNavigate, Outlet } from 'react-router-dom';
+import classes from './index.module.css';
 
-export const Header: FC = () => {
+interface Props {
+  title: string;
+}
+
+export const Header: FC<Props> = (props) => {
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
   const handleSignOut = (): void => {
@@ -24,22 +29,36 @@ export const Header: FC = () => {
   };
 
   return (
-    <header>
-      <div>
-        {userContext.state.id ? (
-          <button onClick={handleSignOut}>サインアウト</button>
-        ) : (
-          'ログアウト中'
-        )}
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            navigate('/profile/update');
-          }}
-        >
-          プロフィール編集
-        </button>
+    <header className={classes.header}>
+      <div className={classes.header__wrapper}>
+        <div className={classes.logo}>{props.title}</div>
+        <nav className={classes.nav}>
+          <button
+            className={classes.nav__toggle}
+            aria-expanded='false'
+            type='button'
+          >
+            menu
+          </button>
+          <ul className={classes.nav__wrapper}>
+            {userContext.state.name && (
+              <li className={classes.nav__item}>
+                <div
+                  onClick={() => {
+                    navigate('/profile/update');
+                  }}
+                >
+                  プロフィール編集
+                </div>
+              </li>
+            )}
+            {userContext.state.id && (
+              <li className={classes.nav__item}>
+                <div onClick={handleSignOut}>サインアウト</div>
+              </li>
+            )}
+          </ul>
+        </nav>
       </div>
       <Outlet />
     </header>

@@ -11,6 +11,7 @@ import { useValidation } from '../../../hooks/use_validation';
 import { ToastContext } from '../../../contexts/toast';
 import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
+import classes from './index.module.css';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -74,17 +75,18 @@ const index: FC = () => {
   };
 
   const checkValidParams = useCallback(() => {
-    return !emailError && !passwordError;
-  }, [emailError, passwordError]);
+    return !emailError && !passwordError && password === confirmPassword;
+  }, [emailError, passwordError, password, confirmPassword]);
 
   return (
     <div className='main'>
-      <form onSubmit={signUp}>
-        <div className='form-body'>
+      <div className={classes.form_wrapper}>
+        <form className={classes.form} onSubmit={signUp}>
+          <p className={classes.title}>サインアップ</p>
           <Input
             label='メールアドレス'
             type='email'
-            placeholder='example@ex.com'
+            placeholder='email@example.com'
             value={email}
             onChangeHandler={handleChangeEmail}
             valueError={emailError}
@@ -104,14 +106,18 @@ const index: FC = () => {
             value={confirmPassword}
             onChangeHandler={handleChangeConfirmPassword}
             valueError={
-              password !== confirmPassword ? 'パスワードが一致しません' : ''
+              confirmPassword
+                ? password !== confirmPassword
+                  ? 'パスワードが一致しません'
+                  : ''
+                : '確認用パスワードを入力して下さい'
             }
           />
-        </div>
-        <div className='footer'>
-          <Button label='サインアップ' disabled={!checkValidParams()} />
-        </div>
-      </form>
+          <div className={classes.footer}>
+            <Button label='サインアップ' disabled={!checkValidParams()} />
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

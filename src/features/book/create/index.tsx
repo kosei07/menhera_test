@@ -19,6 +19,8 @@ import createRandomChar from '../../../utils/random_char';
 import { ToastContext } from '../../../contexts/toast';
 import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
+import classes from './index.module.css';
+import NoImage from '../../../assets/images/no_image.jpg';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -112,41 +114,50 @@ const index: FC = () => {
   }, [titleError, authorError, textError]);
 
   return (
-    <form className='form' onSubmit={createBook}>
-      <div className='form-body'>
-        <div className='image'>
-          <img src={image ? URL.createObjectURL(image) : ''} alt='' />
-          <input type='file' accept='image/*' onChange={handleChangeIcon} />
-        </div>
-        <Input
-          label='タイトル'
-          type='text'
-          placeholder='title'
-          value={title}
-          onChangeHandler={handleChangeTitle}
-          valueError={titleError}
-        />
-        <Input
-          label='筆者'
-          type='text'
-          placeholder='author'
-          value={author}
-          onChangeHandler={handleChangeAuthor}
-          valueError={authorError}
-        />
-        <Input
-          label='感想'
-          type='text'
-          placeholder='author'
-          value={text}
-          onChangeHandler={handleChangeText}
-          valueError={textError}
-        />
+    <div className='main'>
+      <div className={classes.form_wrapper}>
+        <form className={classes.form} onSubmit={createBook}>
+          <div className={classes.image_wrapper}>
+            <label className={classes.image_label}>書籍画像</label>
+            <div className={classes.image_input_wrapper}>
+              <img
+                className={classes.image}
+                src={image ? URL.createObjectURL(image) : NoImage}
+                alt=''
+              />
+              <input type='file' accept='image/*' onChange={handleChangeIcon} />
+            </div>
+          </div>
+          <Input
+            label='タイトル'
+            type='text'
+            placeholder='title'
+            value={title}
+            onChangeHandler={handleChangeTitle}
+            valueError={titleError}
+          />
+          <Input
+            label='筆者'
+            type='text'
+            placeholder='author'
+            value={author}
+            onChangeHandler={handleChangeAuthor}
+            valueError={authorError}
+          />
+          <Input
+            label='感想'
+            type='text'
+            placeholder='impression'
+            value={text}
+            onChangeHandler={handleChangeText}
+            valueError={textError}
+          />
+          <div className={classes.footer}>
+            <Button label='作成' disabled={!checkValidParams()} />
+          </div>
+        </form>
       </div>
-      <div className='footer'>
-        <Button label='作成' disabled={!checkValidParams()} />
-      </div>
-    </form>
+    </div>
   );
 };
 

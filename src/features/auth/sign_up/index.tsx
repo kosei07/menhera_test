@@ -12,8 +12,10 @@ import { ToastContext } from '../../../contexts/toast';
 import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
 import classes from './index.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const index: FC = () => {
+  const navigate = useNavigate();
   const toast = useContext(ToastContext);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -114,6 +116,14 @@ const index: FC = () => {
             }
           />
           <div className={classes.footer}>
+            <p
+              className={classes.footer_text}
+              onClick={() => {
+                navigate('/auth/sign_in');
+              }}
+            >
+              サインインはこちら
+            </p>
             <Button label='サインアップ' disabled={!checkValidParams()} />
           </div>
         </form>

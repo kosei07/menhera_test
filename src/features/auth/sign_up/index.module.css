@@ -23,3 +23,12 @@
   padding-top: 1rem;
   text-align: center;
 }
+
+.footer_text {
+  font-size: 0.5rem;
+  border-bottom: 1px solid grey;
+  display: block;
+  cursor: pointer;
+  width: 7rem;
+  margin: 0 auto 1rem auto;
+}

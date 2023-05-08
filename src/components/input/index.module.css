@@ -1,14 +1,16 @@
 .input_wrapper {
-  height: 5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   width: 20rem;
-  padding: 0.2rem;
+  padding: 0.5rem 0;
+}
+
+.text_wrapper {
+  margin-bottom: 0.2rem;
 }
 
 .label {
-  height: 2rem;
+  font-weight: bold;
 }
 
 .input {
@@ -23,6 +25,7 @@
 }
 
 .error_message {
+  vertical-align: baseline;
   font-size: 0.5rem;
   color: red;
   margin: 0;

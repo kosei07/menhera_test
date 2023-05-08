@@ -13,7 +13,12 @@ interface Props {
 const index: FC<Props> = (props) => {
   return (
     <div className={classes.input_wrapper}>
-      <label className={classes.label}>{props.label}</label>
+      <div className={classes.text_wrapper}>
+        <label className={classes.label}>
+          {props.label}
+          <span className={classes.error_message}> {props.valueError}</span>
+        </label>
+      </div>
       <input
         type={props.type}
         className={classes.input}
@@ -21,7 +26,6 @@ const index: FC<Props> = (props) => {
         value={props.value}
         onChange={props.onChangeHandler}
       />
-      <p className={classes.error_message}> {props.valueError}</p>
     </div>
   );
 };

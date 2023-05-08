@@ -21,8 +21,10 @@ import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
 import classes from './index.module.css';
 import NoImage from '../../../assets/images/no_image.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const index: FC = () => {
+  const navigate = useNavigate();
   const toast = useContext(ToastContext);
   const user = useContext(UserContext);
   const [title, setTitle] = useState<string>('');
@@ -81,9 +83,19 @@ const index: FC = () => {
               text: text,
               image: fileName,
               uid: user.state.id,
-            }).catch(() => {
-              throw new Error();
-            });
+            })
+              .then(() => {
+                toast.dispatch({
+                  type: 'SHOW_SUCCEEDED_TOAST',
+                  payload: {
+                    message: '書籍レビューを作成しました',
+                  },
+                });
+                navigate('/');
+              })
+              .catch(() => {
+                throw new Error();
+              });
           })
           .catch((e) => {
             console.log(e);

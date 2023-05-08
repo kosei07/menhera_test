@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { Header } from './components/header';
 import SignUp from './features/auth/sign_up/index';
 import SignIn from './features/auth/sign_in/index';
 import BookCreate from './features/book/create/index';
@@ -11,113 +10,54 @@ import ProfileUpdate from './features/profile/update/index';
 import { AuthGuard } from './utils/auth_guard';
 
 export const Router = createBrowserRouter([
+  { path: '/auth/sign_up', element: <SignUp /> },
+  { path: '/auth/sign_in', element: <SignIn /> },
   {
-    path: '/',
-    element: <Header />,
-    children: [
-      { path: '/auth/sign_up', element: <SignUp /> },
-      { path: '/auth/sign_in', element: <SignIn /> },
-      {
-        path: '/profile/create',
-        element: (
-          <AuthGuard>
-            <ProfileCreate />
-          </AuthGuard>
-        ),
-      },
-      {
-        path: '/profile/update',
-        element: (
-          <AuthGuard>
-            <ProfileUpdate />
-          </AuthGuard>
-        ),
-      },
-      {
-        path: '/book/create',
-        element: (
-          <AuthGuard>
-            <BookCreate />
-          </AuthGuard>
-        ),
-      },
-      {
-        path: '/book/detail',
-        element: (
-          <AuthGuard>
-            <BookDetail />
-          </AuthGuard>
-        ),
-      },
-      {
-        path: '/book/update',
-        element: (
-          <AuthGuard>
-            <BookUpdate />
-          </AuthGuard>
-        ),
-      },
-      {
-        index: true,
-        element: (
-          <AuthGuard>
-            <BookList />
-          </AuthGuard>
-        ),
-      },
-    ],
+    path: '/profile/create',
+    element: (
+      <AuthGuard>
+        <ProfileCreate />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/profile/update',
+    element: (
+      <AuthGuard>
+        <ProfileUpdate />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/book/create',
+    element: (
+      <AuthGuard>
+        <BookCreate />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/book/detail',
+    element: (
+      <AuthGuard>
+        <BookDetail />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/book/update',
+    element: (
+      <AuthGuard>
+        <BookUpdate />
+      </AuthGuard>
+    ),
+  },
+  {
+    index: true,
+    element: (
+      <AuthGuard>
+        <BookList />
+      </AuthGuard>
+    ),
   },
 ]);
-// export const Router = createBrowserRouter([
-//   { path: '/', element: <Header /> },
-//   { path: '/auth/sign_up', element: <SignUp /> },
-//   { path: '/auth/sign_in', element: <SignIn /> },
-//   {
-//     path: '/profile/create',
-//     element: (
-//       <AuthGuard>
-//         <ProfileCreate />
-//       </AuthGuard>
-//     ),
-//   },
-//   {
-//     path: '/profile/create',
-//     element: (
-//       <AuthGuard>
-//         <ProfileUpdate />
-//       </AuthGuard>
-//     ),
-//   },
-//   {
-//     path: '/book/create',
-//     element: (
-//       <AuthGuard>
-//         <BookCreate />
-//       </AuthGuard>
-//     ),
-//   },
-//   {
-//     path: '/book/detail',
-//     element: (
-//       <AuthGuard>
-//         <BookDetail />
-//       </AuthGuard>
-//     ),
-//   },
-//   {
-//     path: '/book/update',
-//     element: (
-//       <AuthGuard>
-//         <BookUpdate />
-//       </AuthGuard>
-//     ),
-//   },
-//   {
-//     index: true,
-//     element: (
-//       <AuthGuard>
-//         <BookList />
-//       </AuthGuard>
-//     ),
-//   },
-// ]);

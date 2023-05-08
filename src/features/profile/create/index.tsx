@@ -23,8 +23,10 @@ import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
 import classes from './index.module.css';
 import NoImage from '../../../assets/images/no_image.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const index: FC = () => {
+  const navigate = useNavigate();
   const toast = useContext(ToastContext);
   const user = useContext(UserContext);
   const [name, setName] = useState<string>('');
@@ -58,9 +60,19 @@ const index: FC = () => {
               icon: fileName,
               birthOfDate: birthOfDate,
               gender: gender,
-            }).catch(() => {
-              throw new Error();
-            });
+            })
+              .then(() => {
+                toast.dispatch({
+                  type: 'SHOW_SUCCEEDED_TOAST',
+                  payload: {
+                    message: 'プロフィールを作成しました',
+                  },
+                });
+                navigate('/');
+              })
+              .catch(() => {
+                throw new Error();
+              });
           })
           .catch(() => {
             throw new Error();

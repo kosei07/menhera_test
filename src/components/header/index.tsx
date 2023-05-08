@@ -41,21 +41,45 @@ export const Header: FC<Props> = (props) => {
             menu
           </button>
           <ul className={classes.nav__wrapper}>
-            {userContext.state.name && (
-              <li className={classes.nav__item}>
-                <div
-                  onClick={() => {
-                    navigate('/profile/update');
-                  }}
-                >
-                  プロフィール編集
-                </div>
-              </li>
-            )}
             {userContext.state.id && (
-              <li className={classes.nav__item}>
-                <div onClick={handleSignOut}>サインアウト</div>
-              </li>
+              <>
+                <>
+                  {userContext.state.name && (
+                    <>
+                      <li className={classes.nav__item}>
+                        <div
+                          onClick={() => {
+                            navigate('/');
+                          }}
+                        >
+                          ホーム
+                        </div>
+                      </li>
+                      <li className={classes.nav__item}>
+                        <div
+                          onClick={() => {
+                            navigate('/profile/update');
+                          }}
+                        >
+                          プロフィール編集
+                        </div>
+                      </li>
+                      <li className={classes.nav__item}>
+                        <div
+                          onClick={() => {
+                            navigate('/book/create');
+                          }}
+                        >
+                          書籍レビュー作成
+                        </div>
+                      </li>
+                    </>
+                  )}
+                </>
+                <li className={classes.nav__item}>
+                  <div onClick={handleSignOut}>サインアウト</div>
+                </li>
+              </>
             )}
           </ul>
         </nav>

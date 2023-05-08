@@ -83,9 +83,19 @@ const index: FC = () => {
           icon: '',
           birthOfDate: birthOfDate,
           gender: gender,
-        }).catch(() => {
-          throw new Error();
-        });
+        })
+          .then(() => {
+            toast.dispatch({
+              type: 'SHOW_SUCCEEDED_TOAST',
+              payload: {
+                message: 'プロフィールを作成しました',
+              },
+            });
+            navigate('/');
+          })
+          .catch(() => {
+            throw new Error();
+          });
       }
     } catch (err) {
       toast.dispatch({

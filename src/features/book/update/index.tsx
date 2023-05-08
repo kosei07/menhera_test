@@ -162,6 +162,21 @@ const index: FC = () => {
               .catch((e) => {
                 throw new Error(e);
               });
+          } else {
+            const deleteRef = ref(storage, `book/${state.image}`);
+            deleteObject(deleteRef)
+              .then(() => {
+                toast.dispatch({
+                  type: 'SHOW_SUCCEEDED_TOAST',
+                  payload: {
+                    message: '書籍レビューを削除しました',
+                  },
+                });
+                navigate('/');
+              })
+              .catch((e) => {
+                throw new Error(e);
+              });
           }
         })
         .catch((e) => {

@@ -107,9 +107,19 @@ const index: FC = () => {
           text: text,
           image: '',
           uid: user.state.id,
-        }).catch(() => {
-          throw new Error();
-        });
+        })
+          .then(() => {
+            toast.dispatch({
+              type: 'SHOW_SUCCEEDED_TOAST',
+              payload: {
+                message: '書籍レビューを作成しました',
+              },
+            });
+            navigate('/');
+          })
+          .catch(() => {
+            throw new Error();
+          });
       }
     } catch (err) {
       toast.dispatch({

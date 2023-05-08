@@ -24,6 +24,7 @@ import { ToastContext } from '../../../contexts/toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { type BOOK_AND_ID_TYPE } from '../../../type';
 import Input from '../../../components/input/index';
+import Button from '../../../components/button/index';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -238,9 +239,7 @@ const index: FC = () => {
           />
         </div>
         <div className='footer'>
-          <button type='submit' className='btn' disabled={!checkValidParams()}>
-            作成
-          </button>
+          <Button label='更新' disabled={!checkValidParams()} />
         </div>
       </form>
       <div>

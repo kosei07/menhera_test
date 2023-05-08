@@ -10,6 +10,7 @@ import { auth, db, doc, setDoc } from '../../../utils/firebase';
 import { useValidation } from '../../../hooks/use_validation';
 import { ToastContext } from '../../../contexts/toast';
 import Input from '../../../components/input/index';
+import Button from '../../../components/button/index';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -108,9 +109,7 @@ const index: FC = () => {
           />
         </div>
         <div className='footer'>
-          <button type='submit' className='btn' disabled={!checkValidParams()}>
-            Register
-          </button>
+          <Button label='サインアップ' disabled={!checkValidParams()} />
         </div>
       </form>
     </div>

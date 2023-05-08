@@ -20,6 +20,7 @@ import { UserContext } from '../../../contexts/user';
 import createRandomChar from '../../../utils/random_char';
 import { ToastContext } from '../../../contexts/toast';
 import Input from '../../../components/input/index';
+import Button from '../../../components/button/index';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -120,9 +121,7 @@ const index: FC = () => {
         <GenderButton gender={gender} setGender={setGender} />
       </div>
       <div className='footer'>
-        <button type='submit' className='btn' disabled={!checkValidParams()}>
-          Register
-        </button>
+        <Button label='作成' disabled={!checkValidParams()} />
       </div>
     </form>
   );

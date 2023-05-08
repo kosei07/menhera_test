@@ -1,0 +1,48 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 20rem;
+  padding: 0.5rem 0;
+}
+
+.text_wrapper {
+  margin-bottom: 0.2rem;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.year_select {
+  height: 2.5rem;
+  width: 5rem;
+  border: 2px solid gray;
+  border-radius: 0.3rem;
+  text-align: center;
+  margin-right: 0.2rem;
+}
+
+.month_select {
+  height: 2.5rem;
+  width: 3rem;
+  border: 2px solid gray;
+  border-radius: 0.3rem;
+  text-align: center;
+  margin-right: 0.2rem;
+}
+
+.date_select {
+  height: 2.5rem;
+  width: 3rem;
+  border: 2px solid gray;
+  border-radius: 0.3rem;
+  text-align: center;
+}
+
+.error_message {
+  vertical-align: baseline;
+  font-size: 0.5rem;
+  color: red;
+  margin: 0;
+}

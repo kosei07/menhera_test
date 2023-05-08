@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import classes from './index.module.css';
 
 interface Radio {
   label: string;
@@ -6,8 +7,8 @@ interface Radio {
 }
 
 interface Props {
-  gender: string,
-  setGender:React.Dispatch<React.SetStateAction<string>>;
+  gender: string;
+  setGender: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const index: FC<Props> = (props) => {
@@ -27,11 +28,19 @@ const index: FC<Props> = (props) => {
   ];
 
   return (
-    <div className='container form-check'>
-      <div className='row'>
+    <div className={classes.wrapper}>
+      <div className={classes.text_wrapper}>
+        <label className={classes.label}>
+          性別
+          <span className={classes.error_message}>
+            {!props.gender && '性別を選択して下さい'}
+          </span>
+        </label>
+      </div>
+      <div className={classes.inputs_wrapper}>
         {radioButtons.map((radio) => {
           return (
-            <div className='col-4' key={radio.value}>
+            <div className={classes.input_wrapper} key={radio.value}>
               <input
                 className='form-check-input'
                 type='radio'

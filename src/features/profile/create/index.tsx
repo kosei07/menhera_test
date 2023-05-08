@@ -21,6 +21,8 @@ import createRandomChar from '../../../utils/random_char';
 import { ToastContext } from '../../../contexts/toast';
 import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
+import classes from './index.module.css';
+import NoImage from '../../../assets/images/no_image.jpg';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
@@ -88,42 +90,41 @@ const index: FC = () => {
   }, [nameError, birthOfDate, gender]);
 
   return (
-    <form className='form' onSubmit={createProfile}>
-      <div className='form-body'>
-        <div className='image'>
-          <img src={icon ? URL.createObjectURL(icon) : ''} alt='' />
-          <input type='file' accept='image/*' onChange={handleChangeIcon} />
-          <button type='submit'>画像を選択</button>
-        </div>
-        <div className='name'>
-          <label className='form__label' htmlFor='name'>
-            Name
-          </label>
-          <input
-            type='name'
-            id='name'
-            className='form__input'
-            placeholder='Name'
+    <div className='main'>
+      <div className={classes.form_wrapper}>
+        <form className={classes.form} onSubmit={createProfile}>
+          <div className={classes.image_wrapper}>
+            <label className={classes.image_label}>プロフィール画像</label>
+            <div className={classes.image_input_wrapper}>
+              <img
+                className={classes.image}
+                src={icon ? URL.createObjectURL(icon) : NoImage}
+                alt=''
+              />
+              <input
+                className={classes.image_input}
+                type='file'
+                accept='image/*'
+                onChange={handleChangeIcon}
+              />
+            </div>
+          </div>
+          <Input
+            label='名前'
+            type='text'
+            placeholder='山田太郎'
             value={name}
-            onChange={handleChangeName}
+            onChangeHandler={handleChangeName}
+            valueError={nameError}
           />
-          <p>{nameError}</p>
-        </div>
-        <Input
-          label='名前'
-          type='text'
-          placeholder='山田太郎'
-          value={name}
-          onChangeHandler={handleChangeName}
-          valueError={nameError}
-        />
-        <BirthOfDateSelect setBirthOfDate={setBirthOfDate} />
-        <GenderButton gender={gender} setGender={setGender} />
+          <BirthOfDateSelect setBirthOfDate={setBirthOfDate} />
+          <GenderButton gender={gender} setGender={setGender} />
+          <div className={classes.footer}>
+            <Button label='作成' disabled={!checkValidParams()} />
+          </div>
+        </form>
       </div>
-      <div className='footer'>
-        <Button label='作成' disabled={!checkValidParams()} />
-      </div>
-    </form>
+    </div>
   );
 };
 

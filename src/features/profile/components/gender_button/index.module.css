@@ -1,0 +1,31 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 20rem;
+  padding: 0.5rem 0;
+}
+
+.text_wrapper {
+  margin-bottom: 0.2rem;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.inputs_wrapper {
+  height: 2.5rem;
+  display: flex;
+}
+
+.error_message {
+  vertical-align: baseline;
+  font-size: 0.5rem;
+  color: red;
+  margin: 0;
+}
+
+.input_wrapper {
+  margin: 0;
+}

@@ -2,6 +2,8 @@ import { type FC, useEffect, useState } from 'react';
 import { type BOOK_AND_ID_TYPE } from '../../../type';
 import { storage, ref, getDownloadURL } from '../../../utils/firebase';
 import { useLocation } from 'react-router-dom';
+import classes from './index.module.css';
+import NoImage from '../../../assets/images/no_image.jpg';
 
 const index: FC = () => {
   const location = useLocation();
@@ -27,12 +29,23 @@ const index: FC = () => {
     }
   }, [state.image]);
   return (
-    <div>
-      <p>{state.title}</p>
-      <p>{state.author}</p>
-      <p>{state.text}</p>
-      <p>{state.title}</p>
-      <img src={imageUrl} alt='' />
+    <div className='main'>
+      <div className={classes.detail_wrapper}>
+        <div className={classes.detail}>
+          <img className={classes.image} src={imageUrl || NoImage} alt='' />
+          <div className={classes.detail_text}>
+            <p>
+              タイトル：<span>{state.title}</span>
+            </p>
+            <p>
+              筆者：<span>{state.author}</span>
+            </p>
+            <p>
+              感想：<span>{state.text}</span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

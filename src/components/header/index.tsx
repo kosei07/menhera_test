@@ -36,6 +36,11 @@ export const Header: FC<Props> = (props) => {
 
   const insideRef = useRef<HTMLDivElement>(null);
 
+  const moveOtherPath = (path: string): void => {
+    navigate(path);
+    setOpen(false);
+  };
+
   useEffect(() => {
     const el = insideRef.current;
 
@@ -69,7 +74,7 @@ export const Header: FC<Props> = (props) => {
                           <li className={classes.nav_item}>
                             <div
                               onClick={() => {
-                                navigate('/');
+                                moveOtherPath('/');
                               }}
                             >
                               ホーム
@@ -78,7 +83,7 @@ export const Header: FC<Props> = (props) => {
                           <li className={classes.nav_item}>
                             <div
                               onClick={() => {
-                                navigate('/profile/update');
+                                moveOtherPath('/profile/update');
                               }}
                             >
                               プロフィール編集
@@ -87,7 +92,7 @@ export const Header: FC<Props> = (props) => {
                           <li className={classes.nav_item}>
                             <div
                               onClick={() => {
-                                navigate('/book/create');
+                                moveOtherPath('/book/create');
                               }}
                             >
                               書籍レビュー作成
@@ -124,7 +129,7 @@ export const Header: FC<Props> = (props) => {
                               <li className={classes.nav_item}>
                                 <div
                                   onClick={() => {
-                                    navigate('/');
+                                    moveOtherPath('/');
                                   }}
                                 >
                                   ホーム
@@ -133,7 +138,7 @@ export const Header: FC<Props> = (props) => {
                               <li className={classes.nav_item}>
                                 <div
                                   onClick={() => {
-                                    navigate('/profile/update');
+                                    moveOtherPath('/profile/update');
                                   }}
                                 >
                                   プロフィール編集
@@ -142,7 +147,7 @@ export const Header: FC<Props> = (props) => {
                               <li className={classes.nav_item}>
                                 <div
                                   onClick={() => {
-                                    navigate('/book/create');
+                                    moveOtherPath('/book/create');
                                   }}
                                 >
                                   書籍レビュー作成

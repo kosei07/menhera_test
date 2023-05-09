@@ -3,6 +3,8 @@ import { type BOOK_AND_ID_TYPE } from '../../../../../type';
 import { storage, ref, getDownloadURL } from '../../../../../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../../../contexts/user';
+import classes from './index.module.css';
+import NoImage from '../../../../../assets/images/no_image.jpg';
 
 const index: FC<BOOK_AND_ID_TYPE> = (props) => {
   const user = useContext(UserContext);
@@ -36,12 +38,12 @@ const index: FC<BOOK_AND_ID_TYPE> = (props) => {
   };
 
   return (
-    <div onClick={onClick}>
-      <p>{props.title}</p>
-      <p>{props.author}</p>
-      <p>{props.text}</p>
-      <p>{props.title}</p>
-      <img src={imageUrl} alt='' />
+    <div className={classes.card} onClick={onClick}>
+      <img className={classes.image} src={imageUrl || NoImage} alt='' />
+      <div className={classes.content_wrapper}>
+        <p className={classes.title}>{props.title}</p>
+        <p className={classes.author}>{props.author}</p>
+      </div>
     </div>
   );
 };

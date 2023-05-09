@@ -8,6 +8,7 @@ import {
 } from '../../../utils/firebase';
 import type { BOOK_TYPE, BOOK_AND_ID_TYPE } from '../../../type/index';
 import BookCard from './components/book_card/index';
+import classes from './index.module.css';
 
 const index: FC = () => {
   const shopsColRef = query(
@@ -34,22 +35,24 @@ const index: FC = () => {
     fetchBooks();
   }, []);
   return (
-    <>
-      {books.map(function (book, index) {
-        return (
-          <div key={index}>
-            <BookCard
-              id={book.id}
-              title={book.title}
-              author={book.author}
-              text={book.text}
-              image={book.image}
-              uid={book.uid}
-            />
-          </div>
-        );
-      })}
-    </>
+    <div className='main'>
+      <div className={classes.books_wrapper}>
+        {books.map(function (book, index) {
+          return (
+            <div key={index}>
+              <BookCard
+                id={book.id}
+                title={book.title}
+                author={book.author}
+                text={book.text}
+                image={book.image}
+                uid={book.uid}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 

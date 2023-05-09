@@ -1,0 +1,6 @@
+.books_wrapper {
+  padding: 5rem 10rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}

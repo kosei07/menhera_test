@@ -81,7 +81,7 @@ const index: FC = () => {
     try {
       if (image) {
         const fileName = createRandomChar();
-        const imageRef = ref(storage, `book/${fileName}`);
+        const imageRef = ref(storage, `/book/${fileName}`);
         uploadBytes(imageRef, image)
           .then(() => {
             setDoc(doc(db, 'books', state.id), {
@@ -92,13 +92,30 @@ const index: FC = () => {
               uid: user.state.id,
             })
               .then(() => {
-                toast.dispatch({
-                  type: 'SHOW_SUCCEEDED_TOAST',
-                  payload: {
-                    message: '書籍レビューを更新しました',
-                  },
-                });
-                navigate('/');
+                if (state.image) {
+                  const deleteRef = ref(storage, `book/${state.image}`);
+                  deleteObject(deleteRef)
+                    .then(() => {
+                      toast.dispatch({
+                        type: 'SHOW_SUCCEEDED_TOAST',
+                        payload: {
+                          message: '書籍レビューを更新しました',
+                        },
+                      });
+                      navigate('/');
+                    })
+                    .catch((e) => {
+                      throw new Error(e);
+                    });
+                } else {
+                  toast.dispatch({
+                    type: 'SHOW_SUCCEEDED_TOAST',
+                    payload: {
+                      message: '書籍レビューを更新しました',
+                    },
+                  });
+                  navigate('/');
+                }
               })
               .catch(() => {
                 throw new Error();
@@ -107,20 +124,6 @@ const index: FC = () => {
           .catch(() => {
             throw new Error();
           });
-        const deleteRef = ref(storage, `book/${state.image}`);
-        deleteObject(deleteRef).catch((e) => {
-          throw new Error(e);
-        });
-        navigate('/book/update', {
-          state: {
-            id: state.id,
-            title: title,
-            author: author,
-            text: text,
-            image: fileName,
-            uid: user.state.id,
-          },
-        });
       } else {
         setDoc(doc(db, 'books', state.id), {
           title: title,
@@ -128,9 +131,19 @@ const index: FC = () => {
           text: text,
           image: preImageUrl,
           uid: user.state.id,
-        }).catch(() => {
-          throw new Error();
-        });
+        })
+          .then(() => {
+            toast.dispatch({
+              type: 'SHOW_SUCCEEDED_TOAST',
+              payload: {
+                message: '書籍レビューを更新しました',
+              },
+            });
+            navigate('/');
+          })
+          .catch(() => {
+            throw new Error();
+          });
       }
     } catch (err) {
       toast.dispatch({

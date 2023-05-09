@@ -156,11 +156,15 @@ const index: FC = () => {
               {icon ? (
                 <img
                   className={classes.image}
-                  src={icon ? URL.createObjectURL(icon) : NoImage}
+                  src={URL.createObjectURL(icon)}
                   alt=''
                 />
               ) : (
-                <img className={classes.image} src={preIcon} alt='' />
+                <img
+                  className={classes.image}
+                  src={preIcon || NoImage}
+                  alt=''
+                />
               )}
               <input
                 className={classes.image_input}

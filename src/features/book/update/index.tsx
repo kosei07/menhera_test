@@ -26,9 +26,11 @@ import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
 import classes from './index.module.css';
 import NoImage from '../../../assets/images/no_image.jpg';
+import { LoadingContext } from '../../../contexts/loading';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
+  const loading = useContext(LoadingContext);
   const navigate = useNavigate();
   const location = useLocation();
   const state: BOOK_AND_ID_TYPE = location.state;
@@ -78,6 +80,12 @@ const index: FC = () => {
 
   const updateBook = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    loading.dispatch({
+      type: 'SHOW_LOADING',
+      payload: {
+        message: '更新中...',
+      },
+    });
     try {
       if (image) {
         const fileName = createRandomChar();
@@ -96,6 +104,9 @@ const index: FC = () => {
                   const deleteRef = ref(storage, `book/${state.image}`);
                   deleteObject(deleteRef)
                     .then(() => {
+                      loading.dispatch({
+                        type: 'HIDE_LOADING',
+                      });
                       toast.dispatch({
                         type: 'SHOW_SUCCEEDED_TOAST',
                         payload: {
@@ -108,6 +119,9 @@ const index: FC = () => {
                       throw new Error(e);
                     });
                 } else {
+                  loading.dispatch({
+                    type: 'HIDE_LOADING',
+                  });
                   toast.dispatch({
                     type: 'SHOW_SUCCEEDED_TOAST',
                     payload: {
@@ -133,6 +147,9 @@ const index: FC = () => {
           uid: user.state.id,
         })
           .then(() => {
+            loading.dispatch({
+              type: 'HIDE_LOADING',
+            });
             toast.dispatch({
               type: 'SHOW_SUCCEEDED_TOAST',
               payload: {
@@ -146,6 +163,9 @@ const index: FC = () => {
           });
       }
     } catch (err) {
+      loading.dispatch({
+        type: 'HIDE_LOADING',
+      });
       toast.dispatch({
         type: 'SHOW_FAILED_TOAST',
         payload: {

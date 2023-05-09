@@ -16,9 +16,11 @@ import { ToastContext } from '../../../contexts/toast';
 import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
 import classes from './index.module.css';
+import { LoadingContext } from '../../../contexts/loading';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
+  const loading = useContext(LoadingContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -46,12 +48,24 @@ const index: FC = () => {
   );
   const signIn = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    loading.dispatch({
+      type: 'SHOW_LOADING',
+      payload: {
+        message: 'サインイン中...',
+      },
+    });
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
+        loading.dispatch({
+          type: 'HIDE_LOADING',
+        });
         navigate('/');
       })
       .catch((e) => {
         if (e instanceof FirebaseError) {
+          loading.dispatch({
+            type: 'HIDE_LOADING',
+          });
           toast.dispatch({
             type: 'SHOW_FAILED_TOAST',
             payload: {

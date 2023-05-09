@@ -7,17 +7,6 @@
   color: white;
 }
 
-@media (max-width: 599px) {
-  .btn {
-    width: 5rem;
-    height: 2.5rem;
-    background-color: deepskyblue;
-    border: 2px solid steelblue;
-    border-radius: 10px;
-    color: white;
-  }
-}
-
 .btn:disabled {
   background-color: lightgray;
   border: 2px solid silver;

@@ -244,11 +244,15 @@ const index: FC = () => {
               {image ? (
                 <img
                   className={classes.image}
-                  src={image ? URL.createObjectURL(image) : NoImage}
+                  src={URL.createObjectURL(image)}
                   alt=''
                 />
               ) : (
-                <img className={classes.image} src={preImageUrl} alt='' />
+                <img
+                  className={classes.image}
+                  src={preImageUrl || NoImage}
+                  alt=''
+                />
               )}
               <input
                 className={classes.image_input}

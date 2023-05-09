@@ -67,13 +67,30 @@ const index: FC = () => {
               gender: gender,
             })
               .then(() => {
-                toast.dispatch({
-                  type: 'SHOW_SUCCEEDED_TOAST',
-                  payload: {
-                    message: 'プロフィールを更新しました',
-                  },
-                });
-                navigate('/');
+                if (state.icon) {
+                  const deleteRef = ref(storage, `icon/${state.icon}`);
+                  deleteObject(deleteRef)
+                    .then(() => {
+                      toast.dispatch({
+                        type: 'SHOW_SUCCEEDED_TOAST',
+                        payload: {
+                          message: 'プロフィールを更新しました',
+                        },
+                      });
+                      navigate('/');
+                    })
+                    .catch((e) => {
+                      throw new Error(e);
+                    });
+                } else {
+                  toast.dispatch({
+                    type: 'SHOW_SUCCEEDED_TOAST',
+                    payload: {
+                      message: 'プロフィールを更新しました',
+                    },
+                  });
+                  navigate('/');
+                }
               })
               .catch(() => {
                 throw new Error();
@@ -82,10 +99,6 @@ const index: FC = () => {
           .catch(() => {
             throw new Error();
           });
-        const deleteRef = ref(storage, `icon/${state.icon}`);
-        deleteObject(deleteRef).catch((e) => {
-          throw new Error(e);
-        });
       } else {
         setDoc(doc(db, 'profiles', state.id), {
           name: name,

@@ -25,8 +25,6 @@ const getPasswordErrorMessage = (name: string, value: string): string => {
 const getNameErrorMessage = (name: string, value: string): string => {
   if (!value) {
     return `${name}を入力してください`;
-  } else if (!value.match(/^[a-zA-Z ]*$/)) {
-    return `${name}は半角英字で入力してください`;
   }
   return '';
 };
@@ -43,8 +41,8 @@ export function useValidation(
   name: string,
   type: 'password' | 'email' | 'name' | 'text',
   length?: {
-    max: number,
-    min: number
+    max: number;
+    min: number;
   }
 ): [error: string, changeHandler: (inputValue: string) => void] {
   const [error, setErrorMessage] = useState<string>('');
@@ -65,12 +63,15 @@ export function useValidation(
         validationResult = getTextErrorMessage(name, inputValue);
         break;
     }
-    if(length){
-      if (inputValue.length < length.min){
-        validationResult = `${name}は${String(length.min)}文字以上で入力してください`;
-      }
-      else if (inputValue.length > length.max){
-        validationResult = `${name}は${String(length.max)}文字以下で入力してください`;
+    if (length) {
+      if (inputValue.length < length.min) {
+        validationResult = `${name}は${String(
+          length.min
+        )}文字以上で入力してください`;
+      } else if (inputValue.length > length.max) {
+        validationResult = `${name}は${String(
+          length.max
+        )}文字以下で入力してください`;
       }
     }
     setErrorMessage(validationResult);

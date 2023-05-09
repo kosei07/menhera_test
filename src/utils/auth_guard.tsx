@@ -16,6 +16,7 @@ import {
   type CollectionReference,
 } from './firebase';
 import { type PROFILE_TYPE } from '../type/index';
+import { LoadingContext } from '../contexts/loading';
 
 interface Props {
   children: ReactNode;
@@ -32,6 +33,7 @@ export const AuthGuard: FC<Props> = (props) => {
   const [state, setState] = useState<State>(initialState);
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
+  const loading = useContext(LoadingContext);
   const profColRef = collection(
     db,
     'profiles'
@@ -39,6 +41,12 @@ export const AuthGuard: FC<Props> = (props) => {
 
   useEffect(() => {
     try {
+      loading.dispatch({
+        type: 'SHOW_LOADING',
+        payload: {
+          message: '認証中...',
+        },
+      });
       const auth = getAuth();
       return onAuthStateChanged(auth, (currentUer) => {
         if (currentUer) {
@@ -64,9 +72,12 @@ export const AuthGuard: FC<Props> = (props) => {
                       payload: snapshot.data(),
                     });
                   }
+                  loading.dispatch({
+                    type: 'HIDE_LOADING',
+                  });
                 })
-                .catch((e) => {
-                  console.log(e);
+                .catch(() => {
+                  throw new Error();
                 });
             }
           }
@@ -79,12 +90,11 @@ export const AuthGuard: FC<Props> = (props) => {
       });
     } catch (error) {
       setState(initialState);
-      throw error;
+      loading.dispatch({
+        type: 'HIDE_LOADING',
+      });
     }
   }, []);
-  if (typeof state.user === 'undefined') {
-    return <p>読み込み中...</p>;
-  }
 
   if (state.user === null) {
     navigate('/auth/sign_in');

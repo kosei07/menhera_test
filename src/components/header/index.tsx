@@ -1,10 +1,10 @@
-import { useState, type FC } from 'react';
+import { useState, type FC, useContext, useRef, useEffect } from 'react';
 import { UserContext } from '../../contexts/user';
-import { useContext } from 'react';
 import { auth, signOut, FirebaseError } from '../../utils/firebase';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import classes from './index.module.css';
 import { useWindowSize } from '../../hooks/use_window_size';
+import { ToastContext } from '../../contexts/toast';
 
 interface Props {
   title: string;
@@ -14,23 +14,44 @@ export const Header: FC<Props> = (props) => {
   const { width } = useWindowSize();
   const navigate = useNavigate();
   const location = useLocation();
+  const toast = useContext(ToastContext);
   const [open, setOpen] = useState<boolean>(false);
   const userContext = useContext(UserContext);
   const handleSignOut = (): void => {
     try {
-      signOut(auth)
-        .then(() => {
-          console.log('サインアウト');
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      signOut(auth).catch(() => {
+        throw new Error();
+      });
     } catch (e) {
       if (e instanceof FirebaseError) {
-        console.log(e);
+        toast.dispatch({
+          type: 'SHOW_FAILED_TOAST',
+          payload: {
+            message: 'サインアウトに失敗しました',
+          },
+        });
       }
     }
   };
+
+  const insideRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = insideRef.current;
+
+    if (!el) return;
+
+    const hundleClickOutside = (e: MouseEvent): void => {
+      if (!el?.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('click', hundleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', hundleClickOutside);
+    };
+  }, [insideRef]);
 
   return (
     <header className={classes.header}>
@@ -44,37 +65,35 @@ export const Header: FC<Props> = (props) => {
                   {userContext.state.id && (
                     <>
                       <>
-                        {userContext.state.name && (
-                          <>
-                            <li className={classes.nav_item}>
-                              <div
-                                onClick={() => {
-                                  navigate('/');
-                                }}
-                              >
-                                ホーム
-                              </div>
-                            </li>
-                            <li className={classes.nav_item}>
-                              <div
-                                onClick={() => {
-                                  navigate('/profile/update');
-                                }}
-                              >
-                                プロフィール編集
-                              </div>
-                            </li>
-                            <li className={classes.nav_item}>
-                              <div
-                                onClick={() => {
-                                  navigate('/book/create');
-                                }}
-                              >
-                                書籍レビュー作成
-                              </div>
-                            </li>
-                          </>
-                        )}
+                        <>
+                          <li className={classes.nav_item}>
+                            <div
+                              onClick={() => {
+                                navigate('/');
+                              }}
+                            >
+                              ホーム
+                            </div>
+                          </li>
+                          <li className={classes.nav_item}>
+                            <div
+                              onClick={() => {
+                                navigate('/profile/update');
+                              }}
+                            >
+                              プロフィール編集
+                            </div>
+                          </li>
+                          <li className={classes.nav_item}>
+                            <div
+                              onClick={() => {
+                                navigate('/book/create');
+                              }}
+                            >
+                              書籍レビュー作成
+                            </div>
+                          </li>
+                        </>
                       </>
                       <li className={classes.nav_item}>
                         <div onClick={handleSignOut}>サインアウト</div>
@@ -84,7 +103,7 @@ export const Header: FC<Props> = (props) => {
                 </ul>
               </nav>
             ) : (
-              <nav className={classes.nav}>
+              <nav className={classes.nav} ref={insideRef}>
                 <button
                   className={classes.nav_toggle}
                   aria-expanded='false'

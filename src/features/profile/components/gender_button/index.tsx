@@ -1,5 +1,6 @@
 import { type FC } from 'react';
 import classes from './index.module.css';
+import { useWindowSize } from '../../../../hooks/use_window_size';
 
 interface Radio {
   label: string;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const index: FC<Props> = (props) => {
+  const { width } = useWindowSize();
   const changeValue = (event: React.ChangeEvent<HTMLInputElement>): void => {
     props.setGender(event.target.value);
   };
@@ -30,12 +32,21 @@ const index: FC<Props> = (props) => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.text_wrapper}>
-        <label className={classes.label}>
-          性別
-          <span className={classes.error_message}>
-            {!props.gender && '性別を選択して下さい'}
-          </span>
-        </label>
+        {width > 599 ? (
+          <label className={classes.label}>
+            性別
+            <span className={classes.error_message}>
+              {!props.gender && '性別を選択して下さい'}
+            </span>
+          </label>
+        ) : (
+          <>
+            <label className={classes.label}>性別</label>
+            <p className={classes.error_message}>
+              {!props.gender && '性別を選択して下さい'}
+            </p>
+          </>
+        )}
       </div>
       <div className={classes.inputs_wrapper}>
         {radioButtons.map((radio) => {

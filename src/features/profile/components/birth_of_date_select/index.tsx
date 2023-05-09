@@ -1,5 +1,6 @@
 import { type FC, useState, useEffect } from 'react';
 import classes from './index.module.css';
+import { useWindowSize } from '../../../../hooks/use_window_size';
 
 interface Props {
   setBirthOfDate: React.Dispatch<React.SetStateAction<string>>;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const index: FC<Props> = (props) => {
+  const { width } = useWindowSize();
   const [year, setYear] = useState<string>('');
   const [month, setMonth] = useState<string>('');
   const [date, setDate] = useState<string>('');
@@ -45,12 +47,21 @@ const index: FC<Props> = (props) => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.text_wrapper}>
-        <label className={classes.label}>
-          生年月日
-          <span className={classes.error_message}>
-            {!(year && month && date) && '生年月日を入力して下さい'}
-          </span>
-        </label>
+        {width > 599 ? (
+          <label className={classes.label}>
+            生年月日
+            <span className={classes.error_message}>
+              {!(year && month && date) && '生年月日を入力して下さい'}
+            </span>
+          </label>
+        ) : (
+          <>
+            <label className={classes.label}>生年月日</label>
+            <p className={classes.error_message}>
+              {!(year && month && date) && '生年月日を入力して下さい'}
+            </p>
+          </>
+        )}
       </div>
       <div className={classes.select_wrapper}>
         <select

@@ -1,5 +1,5 @@
 .toast_wrapper {
-  position: absolute;
+  position: fixed;
   bottom: 1rem;
   left: 50%;
   width: 50%;

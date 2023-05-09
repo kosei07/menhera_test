@@ -5,8 +5,23 @@
   padding: 0.5rem 0;
 }
 
+@media (max-width: 599px) {
+  .input_wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 15rem;
+    padding: 0.5rem 0;
+  }
+}
+
 .text_wrapper {
   margin-bottom: 0.2rem;
+}
+
+@media (max-width: 599px) {
+  .text_wrapper {
+    height: 3rem;
+  }
 }
 
 .label {

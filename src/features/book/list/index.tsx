@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState, useContext } from 'react';
 import {
   db,
   collection,
@@ -10,8 +10,10 @@ import type { BOOK_TYPE, BOOK_AND_ID_TYPE } from '../../../type/index';
 import BookCard from './components/book_card/index';
 import classes from './index.module.css';
 import { useWindowSize } from '../../../hooks/use_window_size';
+import { LoadingContext } from '../../../contexts/loading';
 
 const index: FC = () => {
+  const loading = useContext(LoadingContext);
   const { width } = useWindowSize();
   const [dummyContent, setDummyContent] = useState<number>(0);
 
@@ -30,13 +32,24 @@ const index: FC = () => {
       })
       .then(() => {
         setBooks(docDatas);
+        loading.dispatch({
+          type: 'HIDE_LOADING',
+        });
       })
       .catch(() => {
-        throw new Error();
+        loading.dispatch({
+          type: 'HIDE_LOADING',
+        });
       });
   };
 
   useEffect(() => {
+    loading.dispatch({
+      type: 'SHOW_LOADING',
+      payload: {
+        message: '取得中...',
+      },
+    });
     fetchBooks();
   }, []);
 

@@ -13,10 +13,12 @@ import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
 import classes from './index.module.css';
 import { useNavigate } from 'react-router-dom';
+import { LoadingContext } from '../../../contexts/loading';
 
 const index: FC = () => {
   const navigate = useNavigate();
   const toast = useContext(ToastContext);
+  const loading = useContext(LoadingContext);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -50,6 +52,12 @@ const index: FC = () => {
 
   const signUp = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    loading.dispatch({
+      type: 'SHOW_LOADING',
+      payload: {
+        message: 'サインアップ中...',
+      },
+    });
     try {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -61,6 +69,9 @@ const index: FC = () => {
             gender: '',
           })
             .then(() => {
+              loading.dispatch({
+                type: 'HIDE_LOADING',
+              });
               toast.dispatch({
                 type: 'SHOW_SUCCEEDED_TOAST',
                 payload: {
@@ -77,6 +88,9 @@ const index: FC = () => {
           throw new Error();
         });
     } catch (e) {
+      loading.dispatch({
+        type: 'HIDE_LOADING',
+      });
       toast.dispatch({
         type: 'SHOW_FAILED_TOAST',
         payload: {

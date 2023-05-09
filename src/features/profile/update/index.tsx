@@ -28,10 +28,12 @@ import Button from '../../../components/button/index';
 import classes from './index.module.css';
 import NoImage from '../../../assets/images/no_image.jpg';
 import { useNavigate } from 'react-router-dom';
+import { LoadingContext } from '../../../contexts/loading';
 
 const index: FC = () => {
   const navigate = useNavigate();
   const toast = useContext(ToastContext);
+  const loading = useContext(LoadingContext);
   const state: USER_TYPE = useContext(UserContext).state;
   const [name, setName] = useState<string>('');
   const [birthOfDate, setBirthOfDate] = useState<string>('');
@@ -54,6 +56,12 @@ const index: FC = () => {
 
   const updateProfile = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    loading.dispatch({
+      type: 'SHOW_LOADING',
+      payload: {
+        message: '更新中...',
+      },
+    });
     try {
       if (icon) {
         const fileName = createRandomChar();
@@ -67,13 +75,36 @@ const index: FC = () => {
               gender: gender,
             })
               .then(() => {
-                toast.dispatch({
-                  type: 'SHOW_SUCCEEDED_TOAST',
-                  payload: {
-                    message: 'プロフィールを更新しました',
-                  },
-                });
-                navigate('/');
+                if (state.icon) {
+                  const deleteRef = ref(storage, `icon/${state.icon}`);
+                  deleteObject(deleteRef)
+                    .then(() => {
+                      loading.dispatch({
+                        type: 'HIDE_LOADING',
+                      });
+                      toast.dispatch({
+                        type: 'SHOW_SUCCEEDED_TOAST',
+                        payload: {
+                          message: 'プロフィールを更新しました',
+                        },
+                      });
+                      navigate('/');
+                    })
+                    .catch((e) => {
+                      throw new Error(e);
+                    });
+                } else {
+                  loading.dispatch({
+                    type: 'HIDE_LOADING',
+                  });
+                  toast.dispatch({
+                    type: 'SHOW_SUCCEEDED_TOAST',
+                    payload: {
+                      message: 'プロフィールを更新しました',
+                    },
+                  });
+                  navigate('/');
+                }
               })
               .catch(() => {
                 throw new Error();
@@ -82,10 +113,6 @@ const index: FC = () => {
           .catch(() => {
             throw new Error();
           });
-        const deleteRef = ref(storage, `icon/${state.icon}`);
-        deleteObject(deleteRef).catch((e) => {
-          throw new Error(e);
-        });
       } else {
         setDoc(doc(db, 'profiles', state.id), {
           name: name,
@@ -94,6 +121,9 @@ const index: FC = () => {
           gender: gender,
         })
           .then(() => {
+            loading.dispatch({
+              type: 'HIDE_LOADING',
+            });
             toast.dispatch({
               type: 'SHOW_SUCCEEDED_TOAST',
               payload: {
@@ -107,7 +137,9 @@ const index: FC = () => {
           });
       }
     } catch (err) {
-      console.log(err);
+      loading.dispatch({
+        type: 'HIDE_LOADING',
+      });
       toast.dispatch({
         type: 'SHOW_FAILED_TOAST',
         payload: {

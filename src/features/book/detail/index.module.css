@@ -12,8 +12,22 @@
   border-radius: 1rem;
 }
 
+@media (max-width: 599px) {
+  .detail {
+    border: 5px solid gray;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+  }
+}
+
 .detail_text {
   max-width: 20rem;
+}
+
+@media (max-width: 599px) {
+  .detail_text {
+    max-width: 15rem;
+  }
 }
 
 .detail_text > p {

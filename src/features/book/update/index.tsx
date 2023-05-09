@@ -14,7 +14,6 @@ import {
   db,
   doc,
   setDoc,
-  deleteDoc,
   deleteObject,
 } from '../../../utils/firebase';
 import { useValidation } from '../../../hooks/use_validation';
@@ -27,9 +26,11 @@ import Input from '../../../components/input/index';
 import Button from '../../../components/button/index';
 import classes from './index.module.css';
 import NoImage from '../../../assets/images/no_image.jpg';
+import { LoadingContext } from '../../../contexts/loading';
 
 const index: FC = () => {
   const toast = useContext(ToastContext);
+  const loading = useContext(LoadingContext);
   const navigate = useNavigate();
   const location = useLocation();
   const state: BOOK_AND_ID_TYPE = location.state;
@@ -79,10 +80,16 @@ const index: FC = () => {
 
   const updateBook = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    loading.dispatch({
+      type: 'SHOW_LOADING',
+      payload: {
+        message: '更新中...',
+      },
+    });
     try {
       if (image) {
         const fileName = createRandomChar();
-        const imageRef = ref(storage, `book/${fileName}`);
+        const imageRef = ref(storage, `/book/${fileName}`);
         uploadBytes(imageRef, image)
           .then(() => {
             setDoc(doc(db, 'books', state.id), {
@@ -93,13 +100,36 @@ const index: FC = () => {
               uid: user.state.id,
             })
               .then(() => {
-                toast.dispatch({
-                  type: 'SHOW_SUCCEEDED_TOAST',
-                  payload: {
-                    message: '書籍レビューを更新しました',
-                  },
-                });
-                navigate('/');
+                if (state.image) {
+                  const deleteRef = ref(storage, `book/${state.image}`);
+                  deleteObject(deleteRef)
+                    .then(() => {
+                      loading.dispatch({
+                        type: 'HIDE_LOADING',
+                      });
+                      toast.dispatch({
+                        type: 'SHOW_SUCCEEDED_TOAST',
+                        payload: {
+                          message: '書籍レビューを更新しました',
+                        },
+                      });
+                      navigate('/');
+                    })
+                    .catch((e) => {
+                      throw new Error(e);
+                    });
+                } else {
+                  loading.dispatch({
+                    type: 'HIDE_LOADING',
+                  });
+                  toast.dispatch({
+                    type: 'SHOW_SUCCEEDED_TOAST',
+                    payload: {
+                      message: '書籍レビューを更新しました',
+                    },
+                  });
+                  navigate('/');
+                }
               })
               .catch(() => {
                 throw new Error();
@@ -108,20 +138,6 @@ const index: FC = () => {
           .catch(() => {
             throw new Error();
           });
-        const deleteRef = ref(storage, `book/${state.image}`);
-        deleteObject(deleteRef).catch((e) => {
-          throw new Error(e);
-        });
-        navigate('/book/update', {
-          state: {
-            id: state.id,
-            title: title,
-            author: author,
-            text: text,
-            image: fileName,
-            uid: user.state.id,
-          },
-        });
       } else {
         setDoc(doc(db, 'books', state.id), {
           title: title,
@@ -129,60 +145,27 @@ const index: FC = () => {
           text: text,
           image: preImageUrl,
           uid: user.state.id,
-        }).catch(() => {
-          throw new Error();
-        });
+        })
+          .then(() => {
+            loading.dispatch({
+              type: 'HIDE_LOADING',
+            });
+            toast.dispatch({
+              type: 'SHOW_SUCCEEDED_TOAST',
+              payload: {
+                message: '書籍レビューを更新しました',
+              },
+            });
+            navigate('/');
+          })
+          .catch(() => {
+            throw new Error();
+          });
       }
     } catch (err) {
-      toast.dispatch({
-        type: 'SHOW_FAILED_TOAST',
-        payload: {
-          message: '処理に失敗しました',
-        },
+      loading.dispatch({
+        type: 'HIDE_LOADING',
       });
-    }
-  };
-
-  const deleteBook = (): void => {
-    try {
-      deleteDoc(doc(db, 'books', state.id))
-        .then(() => {
-          if (state.image) {
-            const deleteRef = ref(storage, `book/${state.image}`);
-            deleteObject(deleteRef)
-              .then(() => {
-                toast.dispatch({
-                  type: 'SHOW_SUCCEEDED_TOAST',
-                  payload: {
-                    message: '書籍レビューを削除しました',
-                  },
-                });
-                navigate('/');
-              })
-              .catch((e) => {
-                throw new Error(e);
-              });
-          } else {
-            const deleteRef = ref(storage, `book/${state.image}`);
-            deleteObject(deleteRef)
-              .then(() => {
-                toast.dispatch({
-                  type: 'SHOW_SUCCEEDED_TOAST',
-                  payload: {
-                    message: '書籍レビューを削除しました',
-                  },
-                });
-                navigate('/');
-              })
-              .catch((e) => {
-                throw new Error(e);
-              });
-          }
-        })
-        .catch((e) => {
-          throw new Error(e);
-        });
-    } catch (e) {
       toast.dispatch({
         type: 'SHOW_FAILED_TOAST',
         payload: {
@@ -288,9 +271,6 @@ const index: FC = () => {
           />
           <div className={classes.footer}>
             <Button label='更新' disabled={!checkValidParams()} />
-            <button className={classes.delete_btn} onClick={deleteBook}>
-              削除
-            </button>
           </div>
         </form>
       </div>

@@ -14,7 +14,6 @@ import {
   db,
   doc,
   setDoc,
-  deleteDoc,
   deleteObject,
 } from '../../../utils/firebase';
 import { useValidation } from '../../../hooks/use_validation';
@@ -143,55 +142,6 @@ const index: FC = () => {
     }
   };
 
-  const deleteBook = (): void => {
-    try {
-      deleteDoc(doc(db, 'books', state.id))
-        .then(() => {
-          if (state.image) {
-            const deleteRef = ref(storage, `book/${state.image}`);
-            deleteObject(deleteRef)
-              .then(() => {
-                toast.dispatch({
-                  type: 'SHOW_SUCCEEDED_TOAST',
-                  payload: {
-                    message: '書籍レビューを削除しました',
-                  },
-                });
-                navigate('/');
-              })
-              .catch((e) => {
-                throw new Error(e);
-              });
-          } else {
-            const deleteRef = ref(storage, `book/${state.image}`);
-            deleteObject(deleteRef)
-              .then(() => {
-                toast.dispatch({
-                  type: 'SHOW_SUCCEEDED_TOAST',
-                  payload: {
-                    message: '書籍レビューを削除しました',
-                  },
-                });
-                navigate('/');
-              })
-              .catch((e) => {
-                throw new Error(e);
-              });
-          }
-        })
-        .catch((e) => {
-          throw new Error(e);
-        });
-    } catch (e) {
-      toast.dispatch({
-        type: 'SHOW_FAILED_TOAST',
-        payload: {
-          message: '処理に失敗しました',
-        },
-      });
-    }
-  };
-
   const checkValidParams = useCallback(() => {
     return !titleError && !authorError && !textError;
   }, [titleError, authorError, textError]);
@@ -288,9 +238,6 @@ const index: FC = () => {
           />
           <div className={classes.footer}>
             <Button label='更新' disabled={!checkValidParams()} />
-            <button className={classes.delete_btn} onClick={deleteBook}>
-              削除
-            </button>
           </div>
         </form>
       </div>
